@@ -1,0 +1,27 @@
+.file-item{
+    position: absolute;
+    width: 350px;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    top: 58%;
+    border: 1px solid rgb(187, 187, 187);
+    border-radius: 15px;
+    background-color: rgba(255, 188, 2, 0.863);
+}
+
+.file-icon{
+
+    font-size: 40px;
+}
+
+.file-name{
+    font-size: 20px;
+    color: #000;
+    margin: 0;
+    position: absolute;
+    left: 15%;
+
+    top: 30%;
+}
+
