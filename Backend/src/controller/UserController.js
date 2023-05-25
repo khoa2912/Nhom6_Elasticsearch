@@ -123,12 +123,18 @@ class UserController {
         }
     }
     searchAllField = async (req, res) => {
-        console.log(req)
+        console.log(req.body, 'Reqbody')
         const query = {
-            query_string: {
-                query: '*' + req.body.input + '*',
-            },
+            function_score: {
+                query: {
+                    match: {
+                        [req.body.textfield]: req.body.input
+                    }
+                },
+                boost: "5"
+            }
         }
+        
         try {
             let response = await axios.post(
                 `${esUrl}${req.params.index}/_search?scroll=1h`,
@@ -143,16 +149,18 @@ class UserController {
         }
     }
     searchAdvanced = async (req, res) => {
-        const { query } = req.body
+        const { query, fields } = req.body
         try {
             let response = await axios.post(
                 `${esUrl}${req.params.index}/_search?scroll=1h`,
                 {
                     size: 10000,
                     query: {
-                        simple_query_string: {
+                        multi_match: {
                             query: query,
-                        },
+                            fields: fields,
+                            type: "best_fields"
+                        }
                     },
                 }
             )

@@ -58,7 +58,7 @@ export const CreateIndexPage = (props) => {
         <a className="breadcrumb-item" href="/indexs">
           Danh sách index
         </a>
-        <li className="breadcrumb-item active">Chỉnh sửa Index</li>
+        <li className="breadcrumb-item active">Search Index</li>
       </CDBBreadcrumb>
 
       <div className="container_index">

@@ -4,6 +4,7 @@ import { Button, Card, NavItem } from "react-bootstrap";
 import "./style.css";
 import { useNavigate, useParams } from "react-router-dom";
 import Form from "react-bootstrap/Form";
+import { Select, Space} from 'antd';
 import {
   CDBTableHeader,
   CDBTableBody,
@@ -18,6 +19,7 @@ import { CDBBreadcrumb } from "cdbreact";
 import AlertCT from "../../../components/AlertCT";
 
 const EditIndexPage = (props) => {
+  const { Option } = Select;
   const navigate = useNavigate();
   const params = useParams();
   const [data, setData] = useState([]);
@@ -32,6 +34,8 @@ const EditIndexPage = (props) => {
   const [searchby, setSearchBy] = useState("");
   const [hidden, setHidden] = useState(false);
   const [searchField, setSearchField] = useState([]);
+  const [titlesearch, setTitleSearch] = useState("");
+  const [listField, setListField] = useState([]);
   async function getData() {
     let response = await axios.getData(`/api/datas/${indexId}`);
     setData(response.data.hits);
@@ -47,7 +51,7 @@ const EditIndexPage = (props) => {
         size: size,
         [searchby]: textSearchRecord,
       });
-      console.log(response);
+      console.log(response, 'tìm bản ghi');
       if (response.status === 200) {
         setData(response.data.hits);
         /* getDataTable(response.data.hits); */
@@ -57,6 +61,7 @@ const EditIndexPage = (props) => {
     } else {
       response = await axios.post(`/api/searchs/${indexId}`,{
         input: textSearchRecord,
+        textfield: titlesearch
       });
       console.log(response);
       if (response.status === 200) {
@@ -70,6 +75,7 @@ const EditIndexPage = (props) => {
   async function SearchAvancedRecord() {
       const response = await axios.post(`/api/searchadvanced/${indexId}`, {
         query: inputSearchAvanced,
+        fields: listField
       });
       if (response.status === 200) {
         setData(response.data.hits);
@@ -112,18 +118,27 @@ const EditIndexPage = (props) => {
       {
         label: "Id",
         field: "idField",
-
         attributes: {
           "aria-controls": "DataTable",
           "aria-label": "idField",
+          "aria-label": "scoreField",
         },
       },
+      {
+        label: "Score",
+        field: "scoreField",
+        attributes: {
+          "aria-controls": "DataTable",
+          "aria-label": "scoreField",
+        },
+      }
     ];
     hits[0] &&
       Object.keys(hits[0]._source).map((value) => {
         const temp = {
           label: value,
           field: value,
+          score: value,
           attributes: {
             "aria-controls": "DataTable",
             "aria-label": value,
@@ -138,7 +153,8 @@ const EditIndexPage = (props) => {
       hits.map((value) => {
         const obj = Object.entries(value._source);
         const idField = ["idField", value._id];
-        obj.unshift(idField);
+        const scoreObj = ["scoreField", value._score];
+        obj.unshift(idField, scoreObj);
         const objtemp = Object.fromEntries(obj);
         rowTable.push(objtemp);
       });
@@ -147,8 +163,30 @@ const EditIndexPage = (props) => {
       columns: columnTable,
       rows: rowTable,
     };
-    setDataTable(dataTable);
+
+    const truncateText = (text, maxLength) => {
+      if (text.length <= maxLength) {
+        return text;
+      }
+      return text.substring(0, maxLength) + '...';
+    };
+    if(dataTable.length!=0) {
+      const truncatedDataTable = dataTable&&dataTable.rows.map((item) => ({
+        ...item,
+        lyrics: truncateText(item.lyrics, 100),
+      }));
+      const dataTableFinish = {
+        columns: dataTable.columns,
+        rows: truncatedDataTable,
+      };
+      if(dataTable !== dataTableFinish) {
+        setDataTable(dataTableFinish);
+      }
+      console.log( dataTable, 'trunc')
+    }
   };
+  
+  console.log(dataTable, 'datatable')
   useEffect(() => {
     if (search === false) {
       getData();
@@ -228,6 +266,17 @@ const EditIndexPage = (props) => {
       ];
     });
   };
+  const onChange = (value) => {
+    setTitleSearch(`${value}`);
+  };
+  console.log('titlesearch', titlesearch);
+  const onSearch = (value) => {
+    console.log('search:', value);
+  };
+  const handleChange = (values) => {
+    setListField(values);
+  };
+  console.log('listfield', listField);
   const handleRemoveSearchField = (index) => {
     const list = [...searchField];
     list.splice(index, 1);
@@ -237,17 +286,18 @@ const EditIndexPage = (props) => {
     addSearchField();
     console.log(searchField);
   };
-
+  
+  
   return (
     <>
-      <CDBBreadcrumb>
-        <a className="breadcrumb-item" href="/">
+      <CDBBreadcrumb className={"fixtab"}>
+        <a className="breadcrumb-item" href="/indexs">
           Trang chủ
         </a>
-        <a className="breadcrumb-item" href="/indexs">
+        {/* <a className="breadcrumb-item" href="/indexs">
           Danh sách index
-        </a>
-        <li className="breadcrumb-item active">Chỉnh sửa index</li>
+        </a> */}
+        <li className="breadcrumb-item active">Search index</li>
       </CDBBreadcrumb>
       <div
         style={{
@@ -269,7 +319,7 @@ const EditIndexPage = (props) => {
             <div
               style={{
                 display: "grid",
-                gridTemplateColumns: "repeat(1, minmax(200px, 1000px))",
+                gridTemplateColumns: "repeat(1, minmax(300px, 1000px))",
                 width: "1800px",
               }}
             >
@@ -285,43 +335,8 @@ const EditIndexPage = (props) => {
                       placeholder="Tìm kiếm cơ bản"
                       onChange={(e) => setTextSearchRecord(e.target.value)}
                       required
-                      style={{ width: "20%", height: "40px" }}
+                      style={{ width: "40%", height: "40px" }}
                     />
-
-                    {/* Bỏ */}
-                    {/* danh sách field */}
-                    {/* <select
-                      aria-label="Default select example"
-                      style={{
-                        height: "40px",
-                        marginLeft: "10px",
-                        width: "170px",
-                      }}
-                      onChange={handleOnChangeOption}
-                    >
-                      <option>Tìm theo</option>
-                      {data.hits != undefined
-                        ? Object.keys(data.hits[0]._source).map((key) => (
-                          <option key={key} value={key}>
-                            {jsUcfirst(key)}
-                          </option>
-                        ))
-                        : null}
-                    </select> */}
-
-                    {/* Bỏ */}
-                    {/* <select
-                      aria-label="Default select example"
-                      style={{
-                        height: "40px",
-                        marginLeft: "10px",
-                        width: "170px",
-                      }}
-                      onChange={handleOnChangeOption}>
-                      <option>Type</option>
-                      <option>And</option>
-                      <option>OR</option>
-                    </select> */}
 
                     <Button
                       className="button_index"
@@ -381,6 +396,40 @@ const EditIndexPage = (props) => {
                     : null}
                 </div>
 
+                
+                <div style={{ display: "flex", margin: "10px" }}>
+                  <Select
+                    showSearch
+                    placeholder="Tìm kiếm theo"
+                    optionFilterProp="children"
+                    onChange={onChange}
+                    required
+                    style={{ width: "30%" }}
+                    onSearch={onSearch}
+                    filterOption={(input, option) =>
+                      (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+                    }
+                    
+                    options={[
+                      {
+                        value: 'title',
+                        label: 'Title',
+                      },
+                      {
+                        value: 'author',
+                        label: 'Author',
+                      },
+                      {
+                        value: 'lyrics',
+                        label: 'Lyrics',
+                      },
+                      {
+                        value: 'producer',
+                        label: 'Producer',
+                      }
+                    ]}
+                    />
+                </div>
                 <div style={{ display: "flex", margin: "10px" }}>
                   <>
                     <Form.Control
@@ -397,7 +446,40 @@ const EditIndexPage = (props) => {
                     Tìm kiếm bản ghi
                   </Button>
                 </div>
-                <h5 style={{margin:"10px 10px",fontWeight:"bold"}}>Quy ước tìm kiếm nâng cao &emsp; + : and    &emsp; || &emsp;    | : or</h5>
+                <div style={{ display: "flex", margin: "10px" }}>
+                  <Select
+                    mode="multiple"
+                    style={{
+                      width: '40%'
+                    }}
+                    placeholder="Chọn các trường cần tìm kiếm"
+                    // defaultValue={['china']}
+                    onChange={handleChange}
+                    optionLabelProp="label"
+                  >
+                    <Option value="title" label="Title">
+                      <Space>
+                        Title (Tên bài hát)
+                      </Space>
+                    </Option>
+                    <Option value="author" label="Author">
+                      <Space>
+                        Author (Tác giả)
+                      </Space>
+                    </Option>
+                    <Option value="lyrics" label="Lyrics">
+                      <Space>
+                        Lyrics (Lời bài hát)
+                      </Space>
+                    </Option>
+                    <Option value="producer" label="Producer">
+                      <Space>
+                        Producer (Nhà sản xuất)
+                      </Space>
+                    </Option>
+                  </Select>
+                </div>
+                {/* <h5 style={{margin:"10px 10px",fontWeight:"bold"}}>Quy ước tìm kiếm nâng cao &emsp; + : and    &emsp; || &emsp;    | : or</h5> */}
               </div>
               {/* co length moi render */}
               <div
@@ -473,6 +555,8 @@ const EditIndexPage = (props) => {
                   pagesAmount={4}
                   data={dataTable}
                   searching={false}
+                  style={{margin: '10px'}}
+                  className="custom-data-table"
                 />
               </CDBCardBody>
               {/* </CDBCard> */}
