@@ -51,14 +51,14 @@ export const CreateIndexPage = (props) => {
   };
   return (
     <>
-      <CDBBreadcrumb>
-        <a className="breadcrumb-item" href="/">
+      <CDBBreadcrumb className={"fixtab"}>
+        <a className="breadcrumb-item" href="/indexs">
           Trang chủ
         </a>
         <a className="breadcrumb-item" href="/indexs">
           Danh sách index
         </a>
-        <li className="breadcrumb-item active">Search Index</li>
+        <li className="breadcrumb-item active">Create Index</li>
       </CDBBreadcrumb>
 
       <div className="container_index">
@@ -72,7 +72,7 @@ export const CreateIndexPage = (props) => {
           id="file-upload"
           type="file"
           onChange={handleUploadFile}
-          style={{ width: "80px" }}
+          style={{ width: "80px"}}
         />
 
         <Form.Control

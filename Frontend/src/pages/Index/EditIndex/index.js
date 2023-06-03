@@ -324,7 +324,7 @@ const EditIndexPage = (props) => {
               }}
             >
               <div style={{ display: "auto",margin:"0 15px" }}>
-                <div className="mt-5 w-100">
+                <div className="w-100">
                   <h2 className="font-weight-bold mb-3" style={{margin:"0 5px"}}>Tìm kiếm</h2>
                 </div>
                 <div>
@@ -339,7 +339,7 @@ const EditIndexPage = (props) => {
                     />
 
                     <Button
-                      className="button_index"
+                      className="button_index button_index--change"
                       onClick={handleSearchRecord}
                     >
                       Tìm bản ghi
@@ -442,7 +442,7 @@ const EditIndexPage = (props) => {
                     />
                     <br />
                   </>
-                  <Button className="button_index" onClick={handleSearchAvanced}>
+                  <Button className="button_index button_index--change" onClick={handleSearchAvanced}>
                     Tìm kiếm bản ghi
                   </Button>
                 </div>
@@ -452,7 +452,7 @@ const EditIndexPage = (props) => {
                     style={{
                       width: '40%'
                     }}
-                    placeholder="Chọn các trường cần tìm kiếm"
+                    placeholder="Chọn các field cần tìm kiếm"
                     // defaultValue={['china']}
                     onChange={handleChange}
                     optionLabelProp="label"

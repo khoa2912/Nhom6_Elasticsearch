@@ -56,18 +56,18 @@ const CreateIndexPage = (props) => {
   };
   return (
     <>
-      <CDBBreadcrumb>
-        <a className="breadcrumb-item" href="/">
+      <CDBBreadcrumb className={"fixtab"}>
+        <a className="breadcrumb-item" href="/indexs">
           Trang chủ
         </a>
         <a className="breadcrumb-item" href="/indexs">
           Danh sách index
         </a>
-        <li className="breadcrumb-item active">Search Index</li>
+        <li className="breadcrumb-item active">Create Index</li>
       </CDBBreadcrumb>
 
       <div className="container_index">
-        <h4 className="header_indexs">Tạo Index</h4>
+        <h4 className="header_indexs">Create Index</h4>
 
         <label for="file-upload" className="custom-file-upload">
           <i className="bi bi-file-earmark-diff icon-file-plus"></i>
@@ -82,7 +82,7 @@ const CreateIndexPage = (props) => {
 
         <Form.Control
           type="text"
-          placeholder="Ten index"
+          placeholder="Tên index"
           required
           onChange={(e) => {
             setIndexName(e.target.value);
@@ -91,7 +91,7 @@ const CreateIndexPage = (props) => {
         />
 
         <FileItem name={fileData.name} />
-        <Form.Group controlId="formBasicSelect" style={{marginTop:"240px",padding:"0 70px"}}>
+        <Form.Group controlId="formBasicSelect" style={{marginTop:"210px",padding:"0 70px"}}>
         <Form.Label>Chọn cột dữ liệu unique</Form.Label>
         <Form.Control
           as="select"

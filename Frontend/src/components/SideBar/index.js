@@ -23,7 +23,7 @@ const Sidebar = () => {
           prefix={<i className="fa fa-bars fa-large"></i>}
         >
           <a
-            href="/"
+            href="/indexs"
             className="text-decoration-none"
             style={{ color: "inherit" }}
           >
@@ -33,7 +33,7 @@ const Sidebar = () => {
 
         <CDBSidebarContent className="sidebar-content">
           <CDBSidebarMenu>
-            <NavLink exact to="/" activeClassName="activeClicked">
+            <NavLink exact to="/indexs" activeClassName="activeClicked">
               <CDBSidebarMenuItem icon="columns">Trang chủ</CDBSidebarMenuItem>
             </NavLink>
             <NavLink

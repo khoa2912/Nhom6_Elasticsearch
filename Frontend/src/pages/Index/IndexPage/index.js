@@ -80,8 +80,8 @@ const IndexPage = (props) => {
   };
   return (
     <>
-      <CDBBreadcrumb>
-        <a className="breadcrumb-item" href="/">
+      <CDBBreadcrumb className={"fixtab"}>
+        <a className="breadcrumb-item" href="/indexs">
           Trang chủ
         </a>
         <a className="breadcrumb-item active" href="/indexs">
@@ -111,13 +111,13 @@ const IndexPage = (props) => {
                 //gridTemplateColumns: "repeat(1, minmax(200px, 700px))",
               }}
             >
-              <div className="mt-5 w-100">
+              <div className=" w-100">
                 <h1 className="font-weight-bold mb-3">Danh sách index</h1>
                 <a
                   color="secondary"
-                  className=" btn-create-index"
+                  className=" btn-create-index btn-primary"
                   href="/create-index"
-                  style={{ height: "35px", boxSizing: "content-box", margin:"10px 0",backgroundColor:"black"}}
+                  style={{ height: "35px", boxSizing: "content-box", margin:"10px 0 30px 0" }}
                 >
                   Tạo index
                 </a>

@@ -28,7 +28,7 @@ function SignIn(props) {
   useEffect(() => {
     if (auth.authenticate) {
       setTimeout(() => {
-        navigate("/");
+        navigate("/indexs");
       }, 1000);
     }
   }, [dispatch, auth.authenticate]);

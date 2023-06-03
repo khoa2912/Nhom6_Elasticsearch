@@ -150,6 +150,15 @@ class UserController {
     }
     searchAdvanced = async (req, res) => {
         const { query, fields } = req.body
+        // console.log(fields, 'fieldss')
+        const tempArr = [];
+        fields.map(e=>{
+            if(e !== 'lyrics')
+                tempArr.push(e + "^6.0")
+            else
+                tempArr.push(e + "^3.0")
+        })
+        // console.log(tempArr, 'fieldss')
         try {
             let response = await axios.post(
                 `${esUrl}${req.params.index}/_search?scroll=1h`,
@@ -158,7 +167,7 @@ class UserController {
                     query: {
                         multi_match: {
                             query: query,
-                            fields: fields,
+                            fields: tempArr,
                             type: "best_fields"
                         }
                     },
